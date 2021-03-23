@@ -1,4 +1,5 @@
-﻿using GameRent.Domain.Commands.Login;
+﻿using GameRent.Api.Extensions;
+using GameRent.Domain.Commands.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace GameRent.Api.Controllers
         {
            var response = await _mediator.Send(login);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
     }
 }

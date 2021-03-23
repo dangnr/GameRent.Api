@@ -6,6 +6,7 @@ using GameRent.Domain.Shared;
 using GameRent.Domain.Util;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,14 +38,14 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao criar o cliente!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao criar o cliente!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (!await CheckIfClientCpfIsUnique(request.Cpf))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Já existe um cliente cadastrado com o mesmo cpf!", request);
+                    return new BaseResponse(false, "Já existe um cliente cadastrado com o mesmo cpf!", HttpStatusCode.BadRequest,  request);
                 }
 
                 var client = new Client(request.FirstName, request.LastName, request.Cpf, request.Email, request.Username, request.Password, request.Role);
@@ -53,13 +54,13 @@ namespace GameRent.Application.Handlers
 
                 _logger.LogInformation($"[End] - Client successfully created: { JsonSerializer.Serialize(client) }");
 
-                return new BaseResponse(true, "Cliente criado com sucesso!", client);
+                return new BaseResponse(true, "Cliente criado com sucesso!", HttpStatusCode.OK, client);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while creating the client: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao criar o cliente!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao criar o cliente!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 
@@ -77,21 +78,21 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao atualizar o cliente!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao atualizar o cliente!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (await CheckIfClientExists(request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Cliente não existe na base de dados!", request);
+                    return new BaseResponse(false, "Cliente não existe na base de dados!", HttpStatusCode.NotFound, request);
                 }
 
                 if (!await CheckIfClientCpfIsUnique(request.Cpf, request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Já existe um cliente cadastrado com o mesmo cpf!", request);
+                    return new BaseResponse(false, "Já existe um cliente cadastrado com o mesmo cpf!", HttpStatusCode.BadRequest, request);
                 }
 
                 var client = new Client(request.Id, request.FirstName, request.LastName, request.Cpf, request.Email, request.Username, request.Password, request.Role, request.IsActive);
@@ -100,13 +101,13 @@ namespace GameRent.Application.Handlers
 
                 _logger.LogInformation($"[End] - Client successfully updated: { JsonSerializer.Serialize(client) }");
 
-                return new BaseResponse(true, "Cliente atualizado com sucesso!", client);
+                return new BaseResponse(true, "Cliente atualizado com sucesso!", HttpStatusCode.OK, client);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while updating the client: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao atualizar o cliente!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao atualizar o cliente!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 
@@ -124,27 +125,27 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao deletar o cliente!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao deletar o cliente!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (await CheckIfClientExists(request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Cliente não existe na base de dados!", request);
+                    return new BaseResponse(false, "Cliente não existe na base de dados!", HttpStatusCode.NotFound, request);
                 }
 
                 await _repository.Delete(request.Id);
 
                 _logger.LogInformation($"[End] - Client successfully deleted: { JsonSerializer.Serialize(request) }");
 
-                return new BaseResponse(true, "Cliente deletado com sucesso!");
+                return new BaseResponse(true, "Cliente deletado com sucesso!", HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while deleting the client: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao deletar o cliente!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao deletar o cliente!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 

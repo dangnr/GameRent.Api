@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao criar o empréstimo!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao criar o empréstimo!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 request.SetGames(await _repository.GetGamesFromIds(request.GameIds));
@@ -48,10 +49,17 @@ namespace GameRent.Application.Handlers
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Um ou mais jogos não estão disponíveis para empréstimo!", request);
+                    return new BaseResponse(false, "Um ou mais jogos não estão disponíveis para empréstimo!", HttpStatusCode.BadRequest, request);
                 }
 
-                request.SetClient(await _repository.GetClientFromId(request.ClientId));
+                if (!await CheckIfClientExists(request.ClientId))
+                {
+                    _logger.LogInformation($"[Error] - Request not valid: { request }");
+
+                    return new BaseResponse(false, "Cliente não encontrado na base dados!", HttpStatusCode.NotFound, request);
+                }
+
+                request.SetClient(await _repository.GetClientById(request.ClientId));
 
                 var rent = new Rent(request.EndDate);
 
@@ -62,13 +70,13 @@ namespace GameRent.Application.Handlers
 
                 _logger.LogInformation($"[End] - Rent successfully created: { JsonSerializer.Serialize(rent) }");
 
-                return new BaseResponse(true, "Empréstimo criado com sucesso!", rent);
+                return new BaseResponse(true, "Empréstimo criado com sucesso!", HttpStatusCode.OK, rent);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while creating the rent: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao criar o empréstimo!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao criar o empréstimo!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 
@@ -86,31 +94,33 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao encerrar o empréstimo!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao encerrar o empréstimo!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (!await CheckIfRentExists(request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Empréstimo não existe na base de dados!", request);
+                    return new BaseResponse(false, "Empréstimo não existe na base de dados!", HttpStatusCode.NotFound, request);
                 }
 
                 await _repository.Finish(request.Id);
 
                 _logger.LogInformation($"[End] - Rent successfully finished: { JsonSerializer.Serialize(request) }");
 
-                return new BaseResponse(true, "Empréstimo encerrado com sucesso!");
+                return new BaseResponse(true, "Empréstimo encerrado com sucesso!", HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while finishing the rent: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao encerrar o empréstimo!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao encerrar o empréstimo!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 
         private async Task<bool> CheckIfRentExists(Guid id) => (await _repository.GetById(id) != null);
+
+        private async Task<bool> CheckIfClientExists(Guid id) => (await _repository.GetClientById(id) != null);
 
         private bool CheckIfGamesAreValid(List<Domain.Entities.Game> games) => games.All(x => x.IsAvailable);
     }

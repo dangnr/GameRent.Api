@@ -29,7 +29,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(createClientCommand);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpPut]
@@ -38,7 +38,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(updateClientCommand);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpDelete("{id}")]
@@ -47,7 +47,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(new DeleteClientCommand { Id = id});
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -56,7 +56,17 @@ namespace GameRent.Api.Controllers
         {
             var response = await _clientQueries.GetAll();
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
+        }
+
+        [HttpGet]
+        [Route("username/{username}")]
+        [RoleAuthorize(UserRoleType.Admin)]
+        public async Task<IActionResult> GetAll(string username)
+        {
+            var response = await _clientQueries.GetByUsername(username);
+
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet("{id}")]
@@ -65,7 +75,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _clientQueries.GetById(id);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -75,7 +85,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _clientQueries.GetByRole(role);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
     }
 }

@@ -1,16 +1,15 @@
-﻿using GameRent.Application.ViewModels;
-using GameRent.Domain.Enums;
+﻿using GameRent.Domain.Enums;
+using GameRent.Domain.Shared;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GameRent.Application.Interfaces.Queries
 {
     public interface IClientQueries
     {
-        Task<ClientViewModel> GetById(Guid id);
-        Task<ClientViewModel> GetByUsername(string username);
-        Task<ClientViewModel> GetByRole(UserRoleType role);
-        Task<List<ClientViewModel>> GetAll();
+        Task<BaseResponse> GetById(Guid id);
+        Task<BaseResponse> GetByUsername(string username);
+        Task<BaseResponse> GetByRole(UserRoleType role);
+        Task<BaseResponse> GetAll();
     }
 }

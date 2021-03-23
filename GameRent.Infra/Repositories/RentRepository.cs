@@ -54,9 +54,9 @@ namespace GameRent.Infra.Repositories
             return await _context.Game.Where(x => gamesIds.Contains(x.Id)).ToListAsync();
         }
 
-        public async Task<Client> GetClientFromId(Guid clientId)
+        public async Task<Client> GetClientById(Guid id)
         {
-            return await _context.Client.Where(x => x.Id.Equals(clientId)).FirstOrDefaultAsync();
+            return await _context.Client.FindAsync(id);
         }
     }
 }

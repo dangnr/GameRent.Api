@@ -6,6 +6,7 @@ using GameRent.Domain.Shared;
 using GameRent.Domain.Util;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,14 +38,14 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao criar o jogo!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao criar o jogo!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (!await CheckIfGameNameIsUnique(request.Name))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Já existe um jogo cadastrado com o mesmo nome!", request);
+                    return new BaseResponse(false, "Já existe um jogo cadastrado com o mesmo nome!", HttpStatusCode.BadRequest, request);
                 }
 
                 var game = new Game(request.Name, request.Genre, request.Synopsis, request.Platform, request.LaunchDate);
@@ -53,13 +54,13 @@ namespace GameRent.Application.Handlers
 
                 _logger.LogInformation($"[End] - Game successfully created: { JsonSerializer.Serialize(game) }");
 
-                return new BaseResponse(true, "Jogo criado com sucesso!", game);
+                return new BaseResponse(true, "Jogo criado com sucesso!", HttpStatusCode.OK, game);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while creating the game: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao criar o jogo!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao criar o jogo!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 
@@ -77,21 +78,21 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao atualizar o jogo!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao atualizar o jogo!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (await CheckIfGameExists(request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Jogo não existe na base de dados!", request);
+                    return new BaseResponse(false, "Jogo não existe na base de dados!", HttpStatusCode.NotFound, request);
                 }
 
                 if (!await CheckIfGameNameIsUnique(request.Name, request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Já existe um jogo cadastrado com o mesmo nome!", request);
+                    return new BaseResponse(false, "Já existe um jogo cadastrado com o mesmo nome!", HttpStatusCode.BadRequest, request);
                 }
 
                 var game = new Game(request.Id, request.Name, request.Genre, request.Synopsis, request.Platform, request.LaunchDate, request.IsAvailable, request.IsActive);
@@ -100,13 +101,13 @@ namespace GameRent.Application.Handlers
 
                 _logger.LogInformation($"[End] - Game successfully updated: { JsonSerializer.Serialize(game) }");
 
-                return new BaseResponse(true, "Jogo atualizado com sucesso!", game);
+                return new BaseResponse(true, "Jogo atualizado com sucesso!", HttpStatusCode.OK, game);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while updating the game: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao atualizar o jogo!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao atualizar o jogo!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 
@@ -124,27 +125,27 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao deletar o jogo!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao deletar o jogo!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 if (await CheckIfGameExists(request.Id))
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { request }");
 
-                    return new BaseResponse(false, "Jogo não existe na base de dados!", request);
+                    return new BaseResponse(false, "Jogo não existe na base de dados!", HttpStatusCode.NotFound, request);
                 }
 
                 await _repository.Delete(request.Id);
 
                 _logger.LogInformation($"[End] - Game successfully deleted: { JsonSerializer.Serialize(request) }");
 
-                return new BaseResponse(true, "Jogo deletado com sucesso!");
+                return new BaseResponse(true, "Jogo deletado com sucesso!", HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while deleting the game: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao deletar o jogo!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao deletar o jogo!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
 

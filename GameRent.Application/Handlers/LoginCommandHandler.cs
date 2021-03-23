@@ -6,6 +6,7 @@ using GameRent.Domain.Shared;
 using GameRent.Domain.Util;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace GameRent.Application.Handlers
 
                     _logger.LogInformation($"[Error] - Request not valid: { validationResultErrors }");
 
-                    return new BaseResponse(false, "Ocorreu um problema ao autenticar o usuário!", validationResultErrors);
+                    return new BaseResponse(false, "Ocorreu um problema ao autenticar o usuário!", HttpStatusCode.BadRequest, validationResultErrors);
                 }
 
                 var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
@@ -48,7 +49,7 @@ namespace GameRent.Application.Handlers
                 {
                     _logger.LogInformation($"[Error] - Request not valid: { JsonSerializer.Serialize(request) }");
 
-                    return new BaseResponse(false, "Usuário não encontrado na base de dados!", request);
+                    return new BaseResponse(false, "Usuário não encontrado na base de dados!", HttpStatusCode.NotFound, request);
                 }
 
                 var tokenResponse = await _tokenService.GenerateToken(user);
@@ -56,13 +57,13 @@ namespace GameRent.Application.Handlers
                 if(!tokenResponse.Success)
                     return new BaseResponse(false, "Ocorreu um problema ao gerar o token para o usuário!", tokenResponse.Data);
 
-                return new BaseResponse(true, "Usuário autenticado com sucesso!", new { Username = request.Username, Token = tokenResponse.Data });
+                return new BaseResponse(true, "Usuário autenticado com sucesso!", HttpStatusCode.OK, new { Username = request.Username, Token = tokenResponse.Data });
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while authenticating the user: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao autenticar o usuário!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao autenticar o usuário!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
     }

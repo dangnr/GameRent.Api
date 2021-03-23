@@ -28,7 +28,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(createGameCommand);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpPut]
@@ -37,7 +37,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(updateGameCommand);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpDelete("{id}")]
@@ -46,7 +46,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(new DeleteGameCommand { Id = id});
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -55,7 +55,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _gameQueries.GetAll();
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -65,7 +65,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _gameQueries.GetAllAvailable();
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -75,7 +75,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _gameQueries.GetAllRented();
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet("{id}")]
@@ -84,7 +84,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _gameQueries.GetById(id);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
     }
 }

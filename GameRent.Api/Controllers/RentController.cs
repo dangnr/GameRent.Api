@@ -29,7 +29,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(createRentCommand);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpPut]
@@ -39,7 +39,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _mediator.Send(new FinishRentCommand { Id = id });
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -48,7 +48,17 @@ namespace GameRent.Api.Controllers
         {
             var response = await _rentQueries.GetAll();
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
+        }
+
+        [HttpGet]
+        [Route("finished")]
+        [RoleAuthorize(UserRoleType.Admin)]
+        public async Task<IActionResult> GetAllFinished()
+        {
+            var response = await _rentQueries.GetAllFinished();
+
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet("{id}")]
@@ -57,7 +67,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _rentQueries.GetById(id);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
 
         [HttpGet]
@@ -67,7 +77,7 @@ namespace GameRent.Api.Controllers
         {
             var response = await _rentQueries.GetByClientId(clientId);
 
-            return Ok(response);
+            return CustomResponse.GetResponse(response);
         }
     }
 }

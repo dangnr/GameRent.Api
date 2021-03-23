@@ -15,7 +15,7 @@ namespace GameRent.Domain.Entities
         public string Synopsis { get; private set; }
 
         [MaxLength(100)]
-        public string Platform { get; set; }
+        public string Platform { get; private set; }
 
         public DateTime LaunchDate { get; private set; }
 

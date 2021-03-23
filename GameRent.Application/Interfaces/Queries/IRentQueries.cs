@@ -1,14 +1,14 @@
-﻿using GameRent.Application.ViewModels;
+﻿using GameRent.Domain.Shared;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GameRent.Application.Interfaces.Queries
 {
     public interface IRentQueries
     {
-        Task<RentViewModel> GetById(Guid id);
-        Task<List<RentViewModel>> GetAll();
-        Task<List<RentViewModel>> GetByClientId(Guid id);
+        Task<BaseResponse> GetById(Guid id);
+        Task<BaseResponse> GetAllFinished();
+        Task<BaseResponse> GetAll();
+        Task<BaseResponse> GetByClientId(Guid id);
     }
 }

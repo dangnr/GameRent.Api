@@ -11,6 +11,6 @@ namespace GameRent.Domain.Interfaces.Repositories
         Task Finish(Guid id);
         Task<Rent> GetById(Guid id);
         Task<List<GameRent.Domain.Entities.Game>> GetGamesFromIds(List<Guid> gamesIds);
-        Task<GameRent.Domain.Entities.Client> GetClientFromId(Guid clientId);
+        Task<GameRent.Domain.Entities.Client> GetClientById(Guid id);
     }
 }

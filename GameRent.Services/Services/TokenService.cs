@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -53,13 +54,13 @@ namespace GameRent.Services.Services
 
                 _logger.LogInformation($"[End] - Token successfully generated: { JsonSerializer.Serialize(token) }");
 
-                return await Task.FromResult(new BaseResponse(true, "Token gerado com sucesso!", token));
+                return await Task.FromResult(new BaseResponse(true, "Token gerado com sucesso!", HttpStatusCode.OK, token));
             }
             catch (Exception ex)
             {
                 _logger.LogInformation($"[Error] - An error occurred while generating the token for client: { JsonSerializer.Serialize(ex) }");
 
-                return new BaseResponse(false, "Ocorreu um problema ao gerar o token de acesso!", ex.InnerException.ToString());
+                return new BaseResponse(false, "Ocorreu um problema ao gerar o token de acesso!", HttpStatusCode.InternalServerError, ex.InnerException.ToString());
             }
         }
     }
