@@ -1,6 +1,7 @@
 ﻿using GameRent.Api.Extensions;
-using GameRent.Application.Interfaces.Queries;
-using GameRent.Domain.Commands.Rent;
+using GameRent.Application.Commands.Rent.CreateRent;
+using GameRent.Application.Commands.Rent.FinishRent;
+using GameRent.Application.Queries.Rent;
 using GameRent.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,19 +14,16 @@ namespace GameRent.Api.Controllers
     [ApiController]
     public class RentController : ControllerBase
     {
-
         private readonly IMediator _mediator;
-        private readonly IRentQueries _rentQueries;
 
-        public RentController(IMediator mediator, IRentQueries rentQueries)
+        public RentController(IMediator mediator)
         {
             _mediator = mediator;
-            _rentQueries = rentQueries;
         }
 
         [HttpPost]
         [RoleAuthorize(UserRoleType.Admin, UserRoleType.User)]
-        public async Task<IActionResult> Post([FromBody] CreateRentCommand createRentCommand)
+        public async Task<IActionResult> Post([FromBody] CreateRentCommandRequest createRentCommand)
         {
             var response = await _mediator.Send(createRentCommand);
 
@@ -37,7 +35,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin, UserRoleType.User)]
         public async Task<IActionResult> Put(Guid id)
         {
-            var response = await _mediator.Send(new FinishRentCommand { Id = id });
+            var response = await _mediator.Send(new FinishRentCommandRequest(id));
 
             return CustomResponse.GetResponse(response);
         }
@@ -46,7 +44,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin)]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _rentQueries.GetAll();
+            var response = await _mediator.Send(new RentQueryRequest());
 
             return CustomResponse.GetResponse(response);
         }
@@ -56,7 +54,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin)]
         public async Task<IActionResult> GetAllFinished()
         {
-            var response = await _rentQueries.GetAllFinished();
+            var response = await _mediator.Send(new RentQueryRequest(false));
 
             return CustomResponse.GetResponse(response);
         }
@@ -65,7 +63,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin, UserRoleType.User)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var response = await _rentQueries.GetById(id);
+            var response = await _mediator.Send(new RentQueryRequest(id));
 
             return CustomResponse.GetResponse(response);
         }
@@ -75,7 +73,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin, UserRoleType.User)]
         public async Task<IActionResult> GetByClientId(Guid clientId)
         {
-            var response = await _rentQueries.GetByClientId(clientId);
+            var response = await _mediator.Send(new RentQueryRequest(clientId, true));
 
             return CustomResponse.GetResponse(response);
         }

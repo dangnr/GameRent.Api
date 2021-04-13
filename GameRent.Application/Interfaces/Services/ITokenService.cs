@@ -1,5 +1,5 @@
-﻿using GameRent.Domain.Entities;
-using GameRent.Domain.Shared;
+﻿using GameRent.Application.Shared;
+using GameRent.Domain.Entities;
 using System.Threading.Tasks;
 
 namespace GameRent.Application.Interfaces.Services

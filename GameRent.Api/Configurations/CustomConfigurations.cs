@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
-using static GameRent.Domain.Shared.AppSettings;
+using static GameRent.Application.Shared.AppSettings;
 
 namespace GameRent.Api.Configurations
 {

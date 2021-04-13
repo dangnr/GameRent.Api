@@ -1,4 +1,4 @@
-﻿using GameRent.Domain.Shared;
+﻿using GameRent.Application.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

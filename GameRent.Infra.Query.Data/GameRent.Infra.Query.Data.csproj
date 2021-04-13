@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.78" />
+    <PackageReference Include="SlapperAutomapper.Core" Version="1.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <ProjectReference Include="..\GameRent.Application\GameRent.Application.csproj" />
+    <ProjectReference Include="..\GameRent.Domain\GameRent.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

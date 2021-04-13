@@ -21,8 +21,9 @@
   <ItemGroup>
     <ProjectReference Include="..\GameRent.Application\GameRent.Application.csproj" />
     <ProjectReference Include="..\GameRent.Domain\GameRent.Domain.csproj" />
-    <ProjectReference Include="..\GameRent.Infra\GameRent.Infra.csproj" />
-    <ProjectReference Include="..\GameRent.Services\GameRent.Services.csproj" />
+    <ProjectReference Include="..\GameRent.Infra.Query.Data\GameRent.Infra.Query.Data.csproj" />
+    <ProjectReference Include="..\GameRent.Infra\GameRent.Infra.Command.Data.csproj" />
+    <ProjectReference Include="..\GameRent.Services\GameRent.Infra.Services.csproj" />
   </ItemGroup>
 
 </Project>

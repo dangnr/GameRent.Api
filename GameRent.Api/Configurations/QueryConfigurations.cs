@@ -8,9 +8,9 @@ namespace GameRent.Api.Configurations
     {
         public static IServiceCollection AddQueryConfigurations(this IServiceCollection services)
         {
-            services.AddScoped<IGameQueries, GameQueries>();
-            services.AddScoped<IClientQueries, ClientQueries>();
-            services.AddScoped<IRentQueries, RentQueries>();
+            services.AddScoped<IGameQueryRepository, GameQueryRepository>();
+            services.AddScoped<IClientQueryRepository, ClientQueryRepository>();
+            services.AddScoped<IRentQueryRepository, RentQueryRepository>();
 
             return services;
         }

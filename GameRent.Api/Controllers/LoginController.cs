@@ -1,5 +1,5 @@
 ﻿using GameRent.Api.Extensions;
-using GameRent.Domain.Commands.Login;
+using GameRent.Application.Commands.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace GameRent.Api.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody] LoginCommand login)
+        public async Task<IActionResult> Authenticate([FromBody] LoginCommandRequest login)
         {
            var response = await _mediator.Send(login);
 

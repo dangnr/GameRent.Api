@@ -1,7 +1,7 @@
 ﻿using GameRent.Application.Interfaces.Services;
+using GameRent.Application.Shared;
 using GameRent.Domain.Entities;
 using GameRent.Domain.Helpers;
-using GameRent.Domain.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static GameRent.Domain.Shared.AppSettings;
+using static GameRent.Application.Shared.AppSettings;
 
 namespace GameRent.Services.Services
 {
