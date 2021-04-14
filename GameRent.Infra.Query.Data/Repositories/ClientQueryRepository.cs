@@ -20,7 +20,7 @@ namespace GameRent.Infra.Queries
             _sqlConnection = new SqlConnection(connectionStrings.Value.DefaultConnection);
         }
 
-        public async Task<List<ClientViewModel>> FilteredWhereAsync(ClientQueryRequest request)
+        public async Task<List<ClientViewModel>> GetFilteredItemsAsync(ClientQueryRequest request)
         {
             var queryArgs = new DynamicParameters();
 
@@ -31,13 +31,14 @@ namespace GameRent.Infra.Queries
                             Cpf,
 	                        Email,
 	                        IsActive
+                           FROM [Client]
                            {FormatQueryFilter(request, ref queryArgs)}
                            ORDER BY FirstName";
 
-            return (await _sqlConnection.QueryAsync<ClientViewModel>(query)).AsList();
+            return (await _sqlConnection.QueryAsync<ClientViewModel>(query, queryArgs)).AsList();
         }
 
-        public async Task<ClientViewModel> GetById(ClientQueryRequest request)
+        public async Task<ClientViewModel> GetFilteredItemAsync(ClientQueryRequest request)
         {
             var queryArgs = new DynamicParameters();
 
@@ -48,6 +49,7 @@ namespace GameRent.Infra.Queries
                             Cpf,
 	                        Email,
 	                        IsActive
+                           FROM [Client]
                            {FormatQueryFilter(request, ref queryArgs)}
                            ORDER BY FirstName";
 

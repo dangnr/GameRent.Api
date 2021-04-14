@@ -20,7 +20,7 @@ namespace GameRent.Infra.Queries
             _sqlConnection = new SqlConnection(connectionStrings.Value.DefaultConnection);
         }
 
-        public async Task<List<GameViewModel>> FilteredWhereAsync(GameQueryRequest request)
+        public async Task<List<GameViewModel>> GetFilteredItemsAsync(GameQueryRequest request)
         {
             var queryArgs = new DynamicParameters();
 
@@ -33,14 +33,14 @@ namespace GameRent.Infra.Queries
 	                        LaunchDate,
                             IsAvailable,
 	                        IsActive
-                           FROM Game
+                           FROM [Game]
                            {FormatQueryFilter(request, ref queryArgs)}
                            ORDER BY Name";
 
             return (await _sqlConnection.QueryAsync<GameViewModel>(query)).AsList();
         }
 
-        public async Task<GameViewModel> GetById(GameQueryRequest request)
+        public async Task<GameViewModel> GetFilteredItemAsync(GameQueryRequest request)
         {
             var queryArgs = new DynamicParameters();
 
@@ -53,7 +53,7 @@ namespace GameRent.Infra.Queries
                             LaunchDate,
                             IsAvailable,
                             IsActive
-                           FROM Game
+                           FROM [Game]
                            {FormatQueryFilter(request, ref queryArgs)}
                            ORDER BY Name";
 

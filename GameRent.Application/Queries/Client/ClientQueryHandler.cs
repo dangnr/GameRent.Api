@@ -27,7 +27,9 @@ namespace GameRent.Application.Queries.Client
 
             try
             {
-                var result = await _clientQueryRepository.FilteredWhereAsync(request);
+                object result = (request.Id.HasValue || !string.IsNullOrEmpty(request.Username) ?
+                    await _clientQueryRepository.GetFilteredItemAsync(request) :
+                    await _clientQueryRepository.GetFilteredItemsAsync(request));
 
                 if (result is null)
                 {

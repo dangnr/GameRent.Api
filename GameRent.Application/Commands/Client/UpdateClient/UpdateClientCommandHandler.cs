@@ -58,7 +58,7 @@ namespace GameRent.Application.Commands.Client.UpdateClient
 
                 var client = new Domain.Entities.Client(request.Id, request.FirstName, request.LastName, request.Cpf, request.Email, request.Username, request.Password, request.Role, request.IsActive);
 
-                await _repository.Create(client);
+                await _repository.Update(client);
 
                 _logger.LogInformation($"[End] - Client successfully updated: { JsonSerializer.Serialize(client) }");
 

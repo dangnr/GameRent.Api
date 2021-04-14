@@ -7,8 +7,8 @@ namespace GameRent.Application.Interfaces.Queries
 {
     public interface IRentQueryRepository
     {
-        Task<List<RentViewModel>> FilteredWhereAsync(RentQueryRequest request);
+        Task<List<RentViewModel>> GetFilteredItemsAsync(RentQueryRequest request);
 
-        Task<RentViewModel> GetById(RentQueryRequest request);
+        Task<RentViewModel> GetFilteredItemAsync(RentQueryRequest request);
     }
 }

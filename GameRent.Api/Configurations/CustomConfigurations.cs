@@ -18,6 +18,7 @@ namespace GameRent.Api.Configurations
 
             services.AddMediatR(assembly);
             services.Configure<TokenSettings>(configuration.GetSection("TokenSettings"));
+            services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
 
             return services;
         }

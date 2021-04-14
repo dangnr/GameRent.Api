@@ -7,8 +7,8 @@ namespace GameRent.Application.Interfaces.Queries
 {
     public interface IClientQueryRepository
     {
-        Task<List<ClientViewModel>> FilteredWhereAsync(ClientQueryRequest request);
+        Task<List<ClientViewModel>> GetFilteredItemsAsync(ClientQueryRequest request);
 
-        Task<ClientViewModel> GetById(ClientQueryRequest request);
+        Task<ClientViewModel> GetFilteredItemAsync(ClientQueryRequest request);
     }
 }

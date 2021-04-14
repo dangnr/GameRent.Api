@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameRent.Application.Queries.Rent
 {
-    public class RentQueryHandler: IRequestHandler<RentQueryRequest, BaseResponse>
+    public class RentQueryHandler : IRequestHandler<RentQueryRequest, BaseResponse>
     {
         private readonly IRentQueryRepository _rentQueryRepository;
         private readonly ILogger<RentQueryHandler> _logger;
@@ -26,7 +26,9 @@ namespace GameRent.Application.Queries.Rent
 
             try
             {
-                var result = await _rentQueryRepository.FilteredWhereAsync(request);
+                object result = (request.Id.HasValue ?
+                    await _rentQueryRepository.GetFilteredItemAsync(request) :
+                    await _rentQueryRepository.GetFilteredItemsAsync(request));
 
                 if (result is null)
                 {

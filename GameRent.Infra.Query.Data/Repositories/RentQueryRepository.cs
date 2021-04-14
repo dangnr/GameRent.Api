@@ -20,7 +20,7 @@ namespace GameRent.Infra.Queries
             _sqlConnection = new SqlConnection(connectionStrings.Value.DefaultConnection);
         }
 
-        public async Task<List<RentViewModel>> FilteredWhereAsync(RentQueryRequest request)
+        public async Task<List<RentViewModel>> GetFilteredItemsAsync(RentQueryRequest request)
         {
             var queryArgs = new DynamicParameters();
 
@@ -39,7 +39,7 @@ namespace GameRent.Infra.Queries
                             g.Id AS Games_Id,
                             g.Name AS Games_Name,
                             g.IsActive AS Games_IsActive
-                           FROM Rent r
+                           FROM [Rent] r
                             INNER JOIN Client c ON c.Id = r.ClientId
                             INNER JOIN GameRent gr ON gr.RentId = r.Id
                             INNER JOIN Game g ON g.Id = gr.GameId
@@ -49,7 +49,7 @@ namespace GameRent.Infra.Queries
             return (await _sqlConnection.QueryAsync<RentViewModel>(query)).AsList();
         }
 
-        public async Task<RentViewModel> GetById(RentQueryRequest request)
+        public async Task<RentViewModel> GetFilteredItemAsync(RentQueryRequest request)
         {
             var queryArgs = new DynamicParameters();
 
@@ -68,7 +68,7 @@ namespace GameRent.Infra.Queries
                             g.Id AS Games_Id,
                             g.Name AS Games_Name,
                             g.IsActive AS Games_IsActive
-                           FROM Rent r
+                           FROM [Rent] r
                             INNER JOIN Client c ON c.Id = r.ClientId
                             INNER JOIN GameRent gr ON gr.RentId = r.Id
                             INNER JOIN Game g ON g.Id = gr.GameId
