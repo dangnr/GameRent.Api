@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRent.Application", "Gam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRent.Domain", "GameRent.Domain\GameRent.Domain.csproj", "{E8E32717-A061-4B4D-BAD1-F1E1299030D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRent.Infra.Command.Data", "GameRent.Infra\GameRent.Infra.Command.Data.csproj", "{FC76AF95-48A0-464C-9237-554F57BB3A0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRent.Infra.Command.Data", "GameRent.Infra.Command.Data\GameRent.Infra.Command.Data.csproj", "{FC76AF95-48A0-464C-9237-554F57BB3A0D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRent.Infra.Services", "GameRent.Services\GameRent.Infra.Services.csproj", "{5935455A-EAF8-41CB-B83D-FBE09321CC5D}"
 EndProject
