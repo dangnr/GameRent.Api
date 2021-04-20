@@ -44,7 +44,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var response = await _mediator.Send(new DeleteGameCommandRequest(id));
+            var response = await _mediator.Send(new DeleteGameCommandRequest(id: id));
 
             return CustomResponse.GetResponse(response);
         }
@@ -63,7 +63,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin, UserRoleType.User)]
         public async Task<IActionResult> GetAllAvailable()
         {
-            var response = await _mediator.Send(new GameQueryRequest(true));
+            var response = await _mediator.Send(new GameQueryRequest(isAvailable: true));
 
             return CustomResponse.GetResponse(response);
         }
@@ -73,7 +73,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin)]
         public async Task<IActionResult> GetAllRented()
         {
-            var response = await _mediator.Send(new GameQueryRequest(false));
+            var response = await _mediator.Send(new GameQueryRequest(isAvailable: false));
 
             return CustomResponse.GetResponse(response);
         }
@@ -82,7 +82,7 @@ namespace GameRent.Api.Controllers
         [RoleAuthorize(UserRoleType.Admin, UserRoleType.User)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var response = await _mediator.Send(new GameQueryRequest(id));
+            var response = await _mediator.Send(new GameQueryRequest(id: id));
 
             return CustomResponse.GetResponse(response);
         }

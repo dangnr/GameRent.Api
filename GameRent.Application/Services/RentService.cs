@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GameRent.Application.Services
@@ -21,19 +22,22 @@ namespace GameRent.Application.Services
 
         public async Task<bool> CheckIfRentExists(Guid id)
         {
-            // TO-DO - implementar logs
+            _logger.LogInformation($"Checking if rent exists by Id: {id}");
+
             return (await _repository.GetById(id) != null);
         }
 
         public async Task<bool> CheckIfClientExists(Guid id)
         {
-            // TO-DO - implementar logs
+            _logger.LogInformation($"Checking if client exists by Id: {id}");
+
             return (await _repository.GetClientById(id) != null);
         }
 
         public bool CheckIfGamesAreValid(List<Domain.Entities.Game> games)
         {
-            // TO-DO - implementar logs
+            _logger.LogInformation($"Checking if games are valid: { JsonSerializer.Serialize(games) }");
+
             return games.All(x => x.IsAvailable);
         }
     }

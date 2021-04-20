@@ -19,7 +19,8 @@ namespace GameRent.Application.Services
 
         public async Task<bool> CheckIfGameNameIsUnique(string name, Guid? id = null)
         {
-            // TO-DO - implementar log
+            _logger.LogInformation(id.HasValue ? $"Checking if game name is unique. Name: {name} - Id: {id}" : $"Checking if game name is unique: {name}");
+
             return !id.HasValue ?
                 await _repository.IsUniqueGameName(name) :
                 await _repository.IsUniqueGameName(id.Value, name);
@@ -27,7 +28,8 @@ namespace GameRent.Application.Services
 
         public async Task<bool> CheckIfGameExists(Guid id)
         {
-            // TO-DO - implementar log
+            _logger.LogInformation($"Checking if game exists by Id: {id}");
+
             return (await _repository.GetById(id) == null);
         }
     }

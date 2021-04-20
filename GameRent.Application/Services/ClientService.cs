@@ -19,7 +19,7 @@ namespace GameRent.Application.Services
 
         public async Task<bool> CheckIfClientCpfIsUnique(string cpf, Guid? id = null)
         {
-            // TO-DO -- implementar log
+            _logger.LogInformation(id.HasValue ? $"Checking if client CPF is unique. Cpf: {cpf} - Id: {id}" : $"Checking if client CPF is unique: {cpf}");
 
             return !id.HasValue ?
                 await _repository.IsUniqueCpf(cpf) :
@@ -28,7 +28,7 @@ namespace GameRent.Application.Services
 
         public async Task<bool> CheckIfClientExists(Guid id)
         {
-            // TO-DO -- implementar log
+            _logger.LogInformation($"Checking if client exists by Id: {id}");
 
             return (await _repository.GetById(id) == null);
         } 
